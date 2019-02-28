@@ -24,18 +24,20 @@ public class MessageProducerServer implements Runnable {
 		}
 	}
 	
+	/*
+	 * Reads an object from the Stream and updates MessageProducerInput
+	 * Server running until stopped
+	 */
 	public void run() {
 		MessageProducer messageProducer;
 		
 		System.out.println("Server started");
 		while(true) {
 			try (Socket socket = serverSocket.accept();
-					ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-					ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream())){
+					ObjectInputStream ois = new ObjectInputStream(socket.getInputStream()); ){
 				try {
 					messageProducer = (MessageProducer) ois.readObject();
 					messageProducerInput.addMessageProducer(messageProducer);
-					oos.flush();
 				}catch(ClassNotFoundException ex) {
 					ex.printStackTrace();
 				}
