@@ -15,14 +15,18 @@ public class MessageProducerClient{
 	}
 
 	public void connect() throws IOException{
-			socket = new Socket(ip, port);
-			oos = new ObjectOutputStream(socket.getOutputStream());
+		socket = new Socket(ip, port);
+		oos = new ObjectOutputStream(socket.getOutputStream());
 	}
 
 	public void disconnect() throws IOException {
 		socket.close();
 	}
 
+	/*
+	 * Connects to socket and sends and instance of MessageProducer
+	 * Disconnects and is ready to be used again with a new socket
+	 */
 	public void send(MessageProducer messageProducer) {
 		try {
 			connect();
