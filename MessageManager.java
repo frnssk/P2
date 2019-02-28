@@ -8,7 +8,6 @@ public class MessageManager {
 	private Thread thread;
 	private LinkedList<Callback> list = new LinkedList<Callback>();
 
-	//Takes a buffer with Message-objects as a parameter
 	public MessageManager(Buffer<Message> buffer) {
 		this.buffer = buffer;
 	}
@@ -23,22 +22,22 @@ public class MessageManager {
 	 */
 	public void start() {
 		if(thread==null) {
-			thread = new MM();
+			thread = new InnerThread();
 			thread.start(); 
 		}
 	}
 
 	/*
 	 * Inner class that reads Message-objects from buffer
-	 * Sends Message-object to observing classes 
+	 * Updates all objects waiting for the callback
 	 */
-	private class MM extends Thread {
+	private class InnerThread extends Thread {
 		public void run() {
 			while(!Thread.interrupted() ) {
 				try {
-					Message m = buffer.get();
+					Message message = buffer.get();
 					for(int i = 0; i < list.size(); i++) {
-						list.get(i).update(m);
+						list.get(i).update(message);
 					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();
